@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     # Swagger
     'drf_yasg',
+    # apps
+    'user_auth',
+    'parking',
 
 ]
 
