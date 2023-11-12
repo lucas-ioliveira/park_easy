@@ -14,9 +14,9 @@ class UserViewList(APIView):
         Response: The serialized data of all users.
     """
     def get(self, request):
-        users = User.objects.all()
+        users = User.objects.filter(is_active=True)
         serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -25,22 +25,34 @@ class UserViewList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # def post(self, request):
-    #     serializer = UserSerializer(data=request.data)
-    #     if serializer.is_valid():
 
-    #         try:
-    #             job_title_request = request.data.get('job_title')
-    #             if job_title_request:
-    #                 if type(job_title_request) != int:
-    #                     return Response({'error': 'Job title must be an integer'}).status_code(status.HTTP_400_BAD_REQUEST)
-    #                 else:
-    #                     job_title = User.objects.filter(job_title=job_title_request)
-    #         except:
-    #             return Response({'error': 'Job title must be an integer'}).status_code(status.HTTP_404_NOT_FOUND)
-            
-        
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+class UserViewDetail(APIView):
+    """
+    Retrieves a single user and serializes it using the UserSerializer.
+    Parameters:
+        request (HttpRequest): The HTTP request object.
+        pk (uuid): The primary key of the user to retrieve.
+    Returns:
+        Response: The serialized data of the user.
+    """
+    def get(self, request, pk):
+        user = User.objects.get(pk=pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def delete(self, request, pk):
+        user = User.objects.get(pk=pk)
+        user.is_active = False
+        user.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def put(self, request, pk):
+        user = User.objects.get(pk=pk)
+        serializer = UserSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         
         
