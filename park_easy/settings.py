@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # apps
     'user_auth',
     'parking',
+    'clients_parking',
 
 ]
 
