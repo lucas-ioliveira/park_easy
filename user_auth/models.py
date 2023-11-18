@@ -44,3 +44,7 @@ class Employee(Base):
     def check_password(self, password):
         hashed_password = self.password.encode('utf-8')
         return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
+    def save(self, *args, **kwargs):
+        if self.password:
+            self.set_password(self.password)
+        super(Employee, self).save(*args, **kwargs)
