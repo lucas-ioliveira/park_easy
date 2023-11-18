@@ -1,13 +1,11 @@
 from django.contrib import admin
-from .models import User
+from .models import Employee
 
 
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    list_display = ['id_user', 'firt_name', 'last_name', 'email', 'job_title', 
-                    'is_admin', 'is_active', 'created_at', 'updated_at']
-   
-    list_filter = ['is_admin', 'is_active']
+@admin.register(Employee)
+class EmployeeAdmin(admin.ModelAdmin):
     
-    search_fields = ['id_user', 'firt_name', 'last_name', 'email', 'job_title', 
-                     'is_admin', 'is_active', 'created_at', 'updated_at']
+    list_display = ('identifier', 'first_name', 'last_name', 'email', 'phone','job_title',
+                     'is_active', 'is_admin', 'created_at', 'updated_at')
+    list_filter = ('first_name','job_title', 'is_active', 'is_admin')
+    search_fields = list_filter

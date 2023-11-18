@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import User
+from .models import Employee
 
-class UserSerializer(serializers.ModelSerializer):
+class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Employee
         fields = '__all__'
     
     job_title_name = serializers.SerializerMethodField()
