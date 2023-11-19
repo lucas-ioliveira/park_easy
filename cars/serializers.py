@@ -3,9 +3,7 @@ from .models import Car
 from clients_parking.models import Clients
 
 
-class CarSerializer(serializers.Serializer):
-    owner = serializers.PrimaryKeyRelatedField(queryset=Clients.objects.all())
-
+class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
         fields = '__all__'
