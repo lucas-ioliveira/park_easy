@@ -40,6 +40,9 @@ class Employee(Base):
         db_table = "employee"
         verbose_name = "Employee"
         verbose_name_plural = "Employees"
+    
+    def __str__(self) -> str:
+        return self.first_name
     def set_password(self, password):
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         self.password = hashed_password.decode('utf-8')

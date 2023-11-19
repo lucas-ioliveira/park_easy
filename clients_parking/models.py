@@ -8,3 +8,6 @@ class Clients(Base):
         db_table = "client"
         verbose_name = "Client"
         verbose_name_plural = "Clients"
+    
+    def __str__(self) -> str:
+        return self.first_name
