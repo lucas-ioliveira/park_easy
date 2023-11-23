@@ -45,8 +45,9 @@ INSTALLED_APPS = [
     'drf_yasg',
     # apps
     'user_auth',
-    'parking',
+    # 'parking',
     'clients_parking',
+    'cars',
 
 ]
 
@@ -84,22 +85,28 @@ WSGI_APPLICATION = 'park_easy.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.getenv('ENVIROMENT')== 'dev':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'park_easy',
-    #     'USER': 'root',
-    #     'PASSWORD': 'root',
-    #     'HOST': 'localhost',
-    #     'PORT': '3306',
-    #     'OPTIONS': {
-    #         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-    #     }
-}
+
+if os.getenv('ENVIROMENT')== 'test':
+    DATABASES = {
+        'default': {
+            'ENGINE': os.getenv('ENGINE_DB'),
+            'NAME': os.getenv('NAME_DB'),
+            'USER': os.getenv('USER_DB'),
+            'PASSWORD': os.getenv('PASSWORD_DB'),
+            'HOST': os.getenv('HOST_DB'),
+            'PORT': os.getenv('PORT_DB'),
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+            }
+        }
+    }
 
 
 # Password validation
@@ -147,7 +154,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-        # token user lucas_oliveira cedd90f848336db762cf8c008684358145f33f21
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -158,7 +164,7 @@ REST_FRAMEWORK = {
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'basic': {
-            'type': 'basic'
+            'type': 'basic',
         }
     },
 }
