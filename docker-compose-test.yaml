@@ -14,7 +14,6 @@ services:
     env_file:
       - envs/test.env
     command: ["/bin/bash", "-c",
-              "python", "manage.py", "makemigrations",
-              "python", "manage.py", "migrate",
               "python manage.py runserver 0.0.0.0:8000"
-              ]
+             ]
+

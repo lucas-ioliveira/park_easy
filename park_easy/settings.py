@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     # apps
     'user_auth',
-    # 'parking',
+    'parking',
     'clients_parking',
     'cars',
 
