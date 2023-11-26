@@ -42,10 +42,10 @@ class Parking(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name="Car")
     is_active = models.BooleanField(default=True, verbose_name="Is Active")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
-    entry = models.DateTimeField(verbose_name="Entry")
-    output = models.DateTimeField(verbose_name="Output")
-    total_time = models.DateTimeField(verbose_name="Total Time")
-    amount_payable = models.FloatField(verbose_name="Amount Payable")
+    entry = models.DateTimeField(verbose_name="Entry", auto_now_add=True)
+    output = models.DateTimeField(verbose_name="Output", null=True, blank=True)
+    total_time = models.DateTimeField(verbose_name="Total Time", null=True, blank=True)
+    amount_payable = models.FloatField(verbose_name="Amount Payable", null=True, blank=True)
 
     db_table = "parking"
     verbose_name = "Parking"
