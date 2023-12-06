@@ -1,2 +1,3 @@
 # park_easy
-Projeto que consiste em um sistema para gereciamento de um estacionamento.
+Projeto que consiste em uma Api para gereciamento de um estacionamento.
+Em desenvolimento.
