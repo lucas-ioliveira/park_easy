@@ -32,6 +32,8 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 # Application definition
 
 INSTALLED_APPS = [
+    # django-jazzmin
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -149,6 +151,23 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Minutes parking
+
+MINUTES_PARKING_30 = 30
+MINUTES_PARKING_60 = 60
+
+# Valores do estacionamento
+"""    
+    30 min - R$8,00
+    60 min - R$15,00
+    a cada hora após 60 min - R$3,00
+    24 horas - R$30,00
+"""
+VALUE_PARKING_30 = 8
+VALUE_PARKING_60 = 15
+VALUE_PARKING_ADD_HOUR = 3
+
 
 # drf config
 REST_FRAMEWORK = {
