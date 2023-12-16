@@ -4,8 +4,15 @@ from rest_framework import status
 
 from .models import Parking, Vacancies
 from .serializers import ParkingSerializer, VacanciesSerializer
+from park_easy.settings import MINUTES_PARKING_30, MINUTES_PARKING_60
+from park_easy.settings import VALUE_PARKING_30, VALUE_PARKING_60, VALUE_PARKING_ADD_HOUR
 
 from django.utils import timezone
+from datetime import datetime
+
+from datetime import timedelta
+
+from ipdb import set_trace
 
 
 class VacanciesViewList(APIView):
@@ -102,6 +109,7 @@ class ParkingViewDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     def patch(self, request, pk):
+        set_trace()
         try:
             parking = Parking.objects.get(pk=pk)
         except Parking.DoesNotExist:
@@ -112,20 +120,19 @@ class ParkingViewDetail(APIView):
         if serializer.is_valid():
             entry = parking.entry
             output = timezone.now()
-            total_time_delta = output - entry
 
-            total_minutes = total_time_delta.total_seconds() // 60
+            total_time = entry - output 
 
-            if total_minutes <= 30:
-                amount_payable = 8
-            elif total_minutes <= 60:
-                amount_payable = 15
+            if total_time <= timedelta(minutes=MINUTES_PARKING_30):
+                amount_payable = VALUE_PARKING_30
+            elif total_time <= MINUTES_PARKING_60:
+                amount_payable = VALUE_PARKING_60
             else:
-                hours = total_minutes // 60
-                amount_payable = 15 + (hours - 1) * 3
+                amount_payable = amount_payable + VALUE_PARKING_ADD_HOUR
 
-            parking.total_time = total_time_delta
-            parking.amount_payable = amount_payable
+            parking.total_time = total_time.timestrftime('%H:%M:%S')
+            parking.amount_payable = str(amount_payable)
+            parking.output = output
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         

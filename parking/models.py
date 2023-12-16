@@ -26,15 +26,6 @@ class Vacancies(models.Model):
 
 class Parking(models.Model):
 
-    '''
-        Valores do estacionamento:
-        30 min - R$8,00
-        60 min - R$15,00
-        a cada hora após 60 min - R$3,00
-        24 horas - R$30,00
-        
-    '''
-
     identifier = models.UUIDField(primary_key=True, default=uuid4, editable=False,
                                   unique=True, verbose_name="Identifier")
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, verbose_name="Employee")
@@ -44,8 +35,8 @@ class Parking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
     entry = models.DateTimeField(verbose_name="Entry", auto_now_add=True)
     output = models.DateTimeField(verbose_name="Output", null=True, blank=True)
-    total_time = models.DateTimeField(verbose_name="Total Time", null=True, blank=True)
-    amount_payable = models.FloatField(verbose_name="Amount Payable", null=True, blank=True)
+    total_time = models.TimeField(verbose_name="Total Time", null=True, blank=True)
+    amount_payable = models.CharField(verbose_name="Amount Payable", max_length=255, null=True, blank=True)
 
     db_table = "parking"
     verbose_name = "Parking"
