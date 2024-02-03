@@ -4,8 +4,8 @@ from rest_framework import status
 
 from .models import Parking, Vacancies
 from .serializers import ParkingSerializer, VacanciesSerializer
-from park_easy.settings import MINUTES_PARKING_30, MINUTES_PARKING_60
-from park_easy.settings import VALUE_PARKING_30, VALUE_PARKING_60, VALUE_PARKING_ADD_HOUR
+from park_easy.settings.settings import MINUTES_PARKING_30, MINUTES_PARKING_60
+from park_easy.settings.settings import VALUE_PARKING_30, VALUE_PARKING_60, VALUE_PARKING_ADD_HOUR
 
 from django.utils import timezone
 from datetime import datetime

@@ -13,7 +13,7 @@ ipdb==0.13.13
 ipython==8.17.2
 jedi==0.19.1
 matplotlib-inline==0.1.6
-mysqlclient==2.2.0
+mysqlclient==2.2.1
 packaging==23.2
 parso==0.8.3
 pexpect==4.8.0
