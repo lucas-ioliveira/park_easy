@@ -1,19 +1,15 @@
 from django.db import models
-
 from clients_parking.models import Clients
 
-from uuid import uuid4
 
 class Car(models.Model):
     
-    identifier = models.UUIDField(primary_key=True, default=uuid4, editable=False,
-                              unique=True, verbose_name="Identifier")
-    owner = models.ForeignKey(Clients, on_delete=models.CASCADE, verbose_name="Owner")
-    plate = models.CharField(max_length=255, verbose_name="Plate")
-    color = models.CharField(max_length=255, verbose_name="Color")
-    brand_car = models.CharField(max_length=255, verbose_name="Brand Car")
-    model_car = models.CharField(max_length=255, verbose_name="Model Car")
-    year_car = models.CharField(max_length=255, verbose_name="Year Car")
+    owner = models.ForeignKey(Clients, on_delete=models.CASCADE, verbose_name="Owner", blank=True, null=True)
+    plate = models.CharField(max_length=255, verbose_name="Plate", unique=True, blank=True, null=True)
+    color = models.CharField(max_length=255, verbose_name="Color", blank=True, null=True)
+    brand_car = models.CharField(max_length=255, verbose_name="Brand Car", blank=True, null=True)
+    model_car = models.CharField(max_length=255, verbose_name="Model Car", blank=True, null=True)
+    year_car = models.CharField(max_length=255, verbose_name="Year Car", blank=True, null=True)
     is_active = models.BooleanField(default=True, verbose_name="Is Active")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")

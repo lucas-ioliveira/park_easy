@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Car
+from cars.models import Car
 
 
 class CarSerializer(serializers.ModelSerializer):
@@ -7,7 +7,7 @@ class CarSerializer(serializers.ModelSerializer):
         model = Car
         fields = '__all__'
     
-    owner_name = serializers.SerializerMethodField()
+    owner_first_name = serializers.SerializerMethodField()
 
-    def get_owner_name(self, obj):
+    def get_owner_first_name(self, obj):
         return obj.owner.first_name

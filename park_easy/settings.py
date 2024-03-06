@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'django-insecure--s*s%w*+u!sjc4k_k3_0vqx-t&h^_ib_0m#)@zl=9*el%s!*-^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') 
+DEBUG = True
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -46,11 +46,10 @@ INSTALLED_APPS = [
     # Swagger
     'drf_yasg',
     # apps
-    'user_auth',
-    'parking',
-    'clients_parking',
     'cars',
-
+    'clients_parking',
+    'employee',
+    'parking',
 ]
 
 MIDDLEWARE = [
@@ -87,29 +86,13 @@ WSGI_APPLICATION = 'park_easy.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if os.getenv('ENVIROMENT')== 'dev':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
 
-if os.getenv('ENVIROMENT')== 'test':
-    DATABASES = {
-        'default': {
-            'ENGINE': os.getenv('ENGINE_DB'),
-            'NAME': os.getenv('NAME_DB'),
-            'USER': os.getenv('USER_DB'),
-            'PASSWORD': os.getenv('PASSWORD_DB'),
-            'HOST': os.getenv('HOST_DB'),
-            'PORT': os.getenv('PORT_DB'),
-            'OPTIONS': {
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-            }
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -173,9 +156,7 @@ VALUE_PARKING_ADD_HOUR = 3
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.authentication.SessionAuthentication',
     )
 }
 

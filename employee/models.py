@@ -1,11 +1,20 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
-class Base(models.Model):
+class Employee(models.Model):
 
-    first_name = models.CharField(max_length=255, verbose_name="First Name", blank=True, null=True)
-    last_name = models.CharField(max_length=255, verbose_name="Last Name", blank=True, null=True)
-    email = models.EmailField(verbose_name="Email", unique=True, blank=True, null=True)
+    EMPLOYEE = 1
+    MANAGER = 2
+
+    JOB_TITLE_CHOICES = (
+        
+        (EMPLOYEE, 'Employee'),
+        (MANAGER, 'Manager'),
+    )
+
+    user = models.ForeignKey(User, verbose_name='User', on_delete=models.CASCADE, blank=True, null=True)
+    job_title = models.SmallIntegerField(choices=JOB_TITLE_CHOICES, verbose_name="Job Title", blank=True, null=True)
     phone = models.CharField(max_length=255, verbose_name="Phone", blank=True, null=True)
     address = models.CharField(max_length=255, verbose_name="Address", blank=True, null=True)
     city = models.CharField(max_length=255, verbose_name="City", blank=True, null=True)
@@ -16,15 +25,12 @@ class Base(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
 
     class Meta:
-        abstract = True
-
-
-class Clients(Base):
-
-    class Meta:
-        db_table = "client"
-        verbose_name = "Client"
-        verbose_name_plural = "Clients"
+        db_table = "employee"
+        verbose_name = "Employee"
+        verbose_name_plural = "Employees"
     
-    def __str__(self) -> str:
-        return self.first_name
+    def __str__(self):
+        return f'{self.user}'
+
+
+

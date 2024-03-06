@@ -36,18 +36,28 @@ class ClientViewDetail(APIView):
         Response: The serialized data of the user.
     """
     def get(self, request, pk):
-        client = Clients.objects.get(pk=pk)
+        try:
+            client = Clients.objects.get(pk=pk)
+        except Clients.DoesNotExist:
+            return Response({'message': 'Client not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
+
         serializer = EmployeeSerializer(client)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def delete(self, request, pk):
-        client = Clients.objects.get(pk=pk)
+        try:
+            client = Clients.objects.get(pk=pk)
+        except Clients.DoesNotExist:
+            return Response({'message': 'Client not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
         client.is_active = False
         client.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     def put(self, request, pk):
-        client = Clients.objects.get(pk=pk)
+        try:
+            client = Clients.objects.get(pk=pk)
+        except Clients.DoesNotExist:
+            return Response({'message': 'Client not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
         serializer = EmployeeSerializer(client, data=request.data)
         if serializer.is_valid():
             serializer.save()
