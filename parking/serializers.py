@@ -10,16 +10,17 @@ class VacanciesSerializer(serializers.ModelSerializer):
 
 class ParkingSerializer(serializers.ModelSerializer):
     
+    class Meta:
+        model = Parking
+        fields = '__all__'
+    
+        
     employee_name = serializers.SerializerMethodField()
     client_name = serializers.SerializerMethodField()
     car = CarSerializer()
 
     def get_employee_name(self, obj):
-        return obj.employee.first_name
+        return obj.employee.user.first_name
     
     def get_client_name(self, obj):
         return obj.client.first_name
-    
-    class Meta:
-        model = Parking
-        fields = '__all__'

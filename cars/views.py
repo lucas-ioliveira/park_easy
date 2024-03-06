@@ -39,18 +39,32 @@ class CarViewDetail(APIView):
         Response: The serialized data of the user.
     """
     def get(self, request, pk):
-        car = Car.objects.get(pk=pk)
+        try:
+            car = Car.objects.get(pk=pk)
+
+        except Car.DoesNotExist:
+            return Response({'message': 'Car not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
+    
         serializer = CarSerializer(car)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def delete(self, request, pk):
-        car = Car.objects.get(pk=pk)
+        try:
+            car = Car.objects.get(pk=pk)
+        except Car.DoesNotExist:
+            return Response({'message': 'Car not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
+        
         car.is_active = False
         car.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     def put(self, request, pk):
-        car = Car.objects.get(pk=pk)
+        try:
+            car = Car.objects.get(pk=pk)
+
+        except Car.DoesNotExist:
+            return Response({'message': 'Car not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
+        
         serializer = CarSerializer(car, data=request.data)
         if serializer.is_valid():
             serializer.save()

@@ -4,5 +4,5 @@ from .views import ClientViewList, ClientViewDetail
 
 urlpatterns = [
     path('', ClientViewList.as_view(), name='client_list'),
-    path('detail/<uuid:pk>/', ClientViewDetail.as_view(), name='client_detail'),
+    path('detail/<int:pk>/', ClientViewDetail.as_view(), name='client_detail'),
 ]

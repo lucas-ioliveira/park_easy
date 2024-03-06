@@ -98,12 +98,20 @@ class ParkingViewDetail(APIView):
         Response: The serialized data of the user.
     """
     def get(self, request, pk):
-        parking = Parking.objects.get(pk=pk)
+        try:
+            parking = Parking.objects.get(pk=pk)
+        except Parking.DoesNotExist:
+            return Response({'message': 'Parking not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
+        
         serializer = ParkingSerializer(parking)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def delete(self, request, pk):
-        parking = Parking.objects.get(pk=pk)
+        try:
+            parking = Parking.objects.get(pk=pk)
+        except Parking.DoesNotExist:
+            return Response({'message': 'Parking not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
+        
         parking.is_active = False
         parking.save()
         return Response(status=status.HTTP_204_NO_CONTENT)

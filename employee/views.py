@@ -1,9 +1,18 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
 from .models import Employee
-from .serializers import EmployeeSerializer
+from .serializers import EmployeeSerializer, UserSerializer
+
+
+class UserCreateAPIView(APIView):
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class EmployeeViewList(APIView):
     """
@@ -36,18 +45,30 @@ class EmployeeViewDetail(APIView):
         Response: The serialized data of the user.
     """
     def get(self, request, pk):
-        employee = Employee.objects.get(pk=pk)
+        try:
+            employee = Employee.objects.get(pk=pk)
+        except Employee.DoesNotExist:
+            return Response({'message': 'Employee not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
+        
         serializer = EmployeeSerializer(employee)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def delete(self, request, pk):
-        employee = Employee.objects.get(pk=pk)
+        try:
+            employee = Employee.objects.get(pk=pk)
+        except Employee.DoesNotExist:
+            return Response({'message': 'Employee not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
+        
         employee.is_active = False
         employee.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     def put(self, request, pk):
-        employee = Employee.objects.get(pk=pk)
+        try:
+            employee = Employee.objects.get(pk=pk)
+        except Employee.DoesNotExist:
+            return Response({'message': 'Employee not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
+        
         serializer = EmployeeSerializer(employee, data=request.data)
         if serializer.is_valid():
             serializer.save()

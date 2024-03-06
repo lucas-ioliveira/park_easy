@@ -38,7 +38,7 @@ urlpatterns = [
     # Django Admin
     path('admin/', admin.site.urls),
     # Apps
-    path('api/v1/employees/', include('user_auth.urls')),
+    path('api/v1/employees/', include('employee.urls')),
     path('api/v1/clients/', include('clients_parking.urls')),
     path('api/v1/cars/', include('cars.urls')),
     path('api/v1/vacancies/', include('parking.urls')),
