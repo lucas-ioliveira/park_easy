@@ -22,11 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
+# SECRET_KEY = 'django-insecure--s*s%w*+u!sjc4k_k3_0vqx-t&h^_ib_0m#)@zl=9*el%s!*-^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') 
+DEBUG = os.getenv('DEBUG')
+# DEBUG = True
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+# ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -50,11 +53,8 @@ INSTALLED_APPS = [
     'clients_parking',
     'employee',
     'parking',
-    'reporting',
     'vacanciens',
-    
-    
-
+    'reporting',
 ]
 
 MIDDLEWARE = [
@@ -93,12 +93,11 @@ WSGI_APPLICATION = 'park_easy.wsgi.application'
 
 
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -147,7 +146,7 @@ MINUTES_PARKING_30 = 30
 MINUTES_PARKING_60 = 60
 
 # Valores do estacionamento
-"""    
+"""
     30 min - R$8,00
     60 min - R$15,00
     a cada hora após 60 min - R$3,00
@@ -178,7 +177,3 @@ SWAGGER_SETTINGS = {
 REDOC_SETTINGS = {
    'LAZY_RENDERING': False,
 }
-
-
-
-
