@@ -41,8 +41,9 @@ urlpatterns = [
     path('api/v1/employees/', include('employee.urls')),
     path('api/v1/clients/', include('clients_parking.urls')),
     path('api/v1/cars/', include('cars.urls')),
-    path('api/v1/vacancies/', include('parking.urls')),
+    path('api/v1/vacancies/', include('vacanciens.urls')),
     path('api/v1/parking/', include('parking.urls')),
+    path('api/v1/reporting/', include('reporting.urls')),
     # swagger
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

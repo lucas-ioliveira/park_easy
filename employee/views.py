@@ -63,13 +63,13 @@ class EmployeeViewDetail(APIView):
         employee.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-    def put(self, request, pk):
+    def patch(self, request, pk):
         try:
             employee = Employee.objects.get(pk=pk)
         except Employee.DoesNotExist:
             return Response({'message': 'Employee not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = EmployeeSerializer(employee, data=request.data)
+        serializer = EmployeeSerializer(employee, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

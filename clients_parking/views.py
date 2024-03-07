@@ -53,12 +53,12 @@ class ClientViewDetail(APIView):
         client.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-    def put(self, request, pk):
+    def patch(self, request, pk):
         try:
             client = Clients.objects.get(pk=pk)
         except Clients.DoesNotExist:
             return Response({'message': 'Client not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = EmployeeSerializer(client, data=request.data)
+        serializer = EmployeeSerializer(client, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
