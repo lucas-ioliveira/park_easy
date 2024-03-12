@@ -6,6 +6,7 @@ COPY . /app
 EXPOSE 8000
 
 RUN apt-get update \
+&& apt-get install -y make \
 && apt-get install -y pkg-config \
 && apt-get install -y gcc \
 && apt-get install -y default-libmysqlclient-dev \

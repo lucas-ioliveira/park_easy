@@ -22,11 +22,12 @@ class EmployeeViewList(APIView):
     Returns:
         Response: The serialized data of all users.
     """
+
     def get(self, request):
         employees = Employee.objects.filter(is_active=True)
         serializer = EmployeeSerializer(employees, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def post(self, request):
         serializer = EmployeeSerializer(data=request.data)
         if serializer.is_valid():
@@ -44,31 +45,41 @@ class EmployeeViewDetail(APIView):
     Returns:
         Response: The serialized data of the user.
     """
+
     def get(self, request, pk):
         try:
             employee = Employee.objects.get(pk=pk)
         except Employee.DoesNotExist:
-            return Response({'message': 'Employee not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
-        
+            return Response(
+                {"message": "Employee not found or non-existent"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
         serializer = EmployeeSerializer(employee)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def delete(self, request, pk):
         try:
             employee = Employee.objects.get(pk=pk)
         except Employee.DoesNotExist:
-            return Response({'message': 'Employee not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
-        
+            return Response(
+                {"message": "Employee not found or non-existent"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
         employee.is_active = False
         employee.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
     def patch(self, request, pk):
         try:
             employee = Employee.objects.get(pk=pk)
         except Employee.DoesNotExist:
-            return Response({'message': 'Employee not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
-        
+            return Response(
+                {"message": "Employee not found or non-existent"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
         serializer = EmployeeSerializer(employee, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()

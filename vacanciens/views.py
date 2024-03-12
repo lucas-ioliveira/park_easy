@@ -5,6 +5,7 @@ from rest_framework import status
 from .models import Vacancies
 from .serializers import VacanciesSerializer
 
+
 class VacanciesViewList(APIView):
     """
     Retrieves all users and serializes them using the UserSerializer.
@@ -13,12 +14,13 @@ class VacanciesViewList(APIView):
     Returns:
         Response: The serialized data of all users.
     """
+
     def get(self, request):
         vacancies = Vacancies.objects.filter(is_active=True)
         serializer = VacanciesSerializer(vacancies, many=True)
         data = serializer.data
         return Response(data, status=status.HTTP_200_OK)
-    
+
     def post(self, request):
         serializer = VacanciesSerializer(data=request.data)
         if serializer.is_valid():
@@ -36,28 +38,38 @@ class VacanciesViewDetail(APIView):
     Returns:
         Response: The serialized data of the user.
     """
+
     def get(self, request, pk):
         try:
             vacancies = Vacancies.objects.get(pk=pk)
         except Vacancies.DoesNotExist:
-            return Response({'message': 'Vacancies not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"message": "Vacancies not found or non-existent"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
         serializer = VacanciesSerializer(vacancies)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def delete(self, request, pk):
         try:
             vacancie = Vacancies.objects.get(pk=pk)
         except Vacancies.DoesNotExist:
-            return Response({'message': 'Vacancies not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"message": "Vacancies not found or non-existent"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
         vacancie.is_active = False
         vacancie.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
     def patch(self, request, pk):
         try:
             vacancie = Vacancies.objects.get(pk=pk)
         except Vacancies.DoesNotExist:
-            return Response({'message': 'Vacancies not found or non-existent'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"message": "Vacancies not found or non-existent"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
         serializer = VacanciesSerializer(vacancie, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
