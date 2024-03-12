@@ -2,7 +2,7 @@ from django.test import TestCase
 from clients_parking.models import Clients
 from django.utils import timezone
 
-class CarTest(TestCase):
+class ClientTest(TestCase):
 
     
     def test_create_client(self):  

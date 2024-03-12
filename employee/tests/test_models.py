@@ -3,7 +3,7 @@ from employee.models import Employee
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-class CarTest(TestCase):
+class EmployeeTest(TestCase):
 
     def setUp(self):
         User.objects.create(
