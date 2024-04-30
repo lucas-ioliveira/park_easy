@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    stdin_open: True
+    tty: True
     restart: always
     ports:
       - "8000:8000"
