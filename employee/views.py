@@ -1,8 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Employee
-from .serializers import EmployeeSerializer, UserSerializer
+
+from park_easy.service import ParkEasyService
+from park_easy.repository import ParkEasyRepository
+
+from employee.models import Employee
+from employee.serializers import EmployeeSerializer, UserSerializer
 
 
 class UserCreateAPIView(APIView):
@@ -24,12 +28,11 @@ class EmployeeViewList(APIView):
     """
 
     def get(self, request):
-        employees = Employee.objects.filter(is_active=True)
-        serializer = EmployeeSerializer(employees, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        employees = ParkEasyService.service_get_all_or_one(model=Employee, app_serializer=EmployeeSerializer)
+        return Response(employees.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = EmployeeSerializer(data=request.data)
+        serializer = ParkEasyService.service_post_or_update(request=request, app_serializer=EmployeeSerializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -48,39 +51,34 @@ class EmployeeViewDetail(APIView):
 
     def get(self, request, pk):
         try:
-            employee = Employee.objects.get(pk=pk)
+            employee = ParkEasyService.service_get_all_or_one(model=Employee, app_serializer=EmployeeSerializer, pk=pk)
         except Employee.DoesNotExist:
             return Response(
                 {"message": "Employee not found or non-existent"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-
-        serializer = EmployeeSerializer(employee)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(employee.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
         try:
-            employee = Employee.objects.get(pk=pk)
+            ParkEasyService.service_del_one(model=Employee, pk=pk)
         except Employee.DoesNotExist:
             return Response(
                 {"message": "Employee not found or non-existent"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-
-        employee.is_active = False
-        employee.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, pk):
         try:
-            employee = Employee.objects.get(pk=pk)
+            employee = ParkEasyRepository.repo_get_all_or_one_obj(model=Employee, pk=pk)
         except Employee.DoesNotExist:
             return Response(
                 {"message": "Employee not found or non-existent"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        serializer = EmployeeSerializer(employee, data=request.data, partial=True)
+        serializer = ParkEasyService.service_post_or_update(request=request, obj=employee, app_serializer=EmployeeSerializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
