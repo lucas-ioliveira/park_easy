@@ -19,7 +19,7 @@ format:
 	black .
 
 build:
-	docker compose -f docker-compose-dev.yaml up --build
+	docker compose -f docker-compose.yaml up -d --build
 
-enter.container:
+enter container:
 	docker exec -it park_easy_app bash
