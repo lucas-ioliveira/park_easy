@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from park_easy.service import ParkEasyService
 from park_easy.repository import ParkEasyRepository
@@ -10,7 +11,18 @@ from employee.serializers import EmployeeSerializer, UserSerializer
 
 
 class UserCreateAPIView(APIView):
+
+    permission_classes = [IsAuthenticated]
+    
     def post(self, request):
+        """
+        Creates a new user using the UserSerializer.
+        Parameters:
+            request (HttpRequest): The HTTP request object.
+        Returns:
+            Response: The serialized data of the newly created user.
+        """
+
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
@@ -26,6 +38,8 @@ class EmployeeViewList(APIView):
     Returns:
         Response: The serialized data of all users.
     """
+
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         employees = ParkEasyService.service_get_all_or_one(model=Employee, app_serializer=EmployeeSerializer)
@@ -48,6 +62,8 @@ class EmployeeViewDetail(APIView):
     Returns:
         Response: The serialized data of the user.
     """
+
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         try:
