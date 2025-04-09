@@ -36,16 +36,19 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+path_namespace = "api/v1/"
+
 urlpatterns = [
     # Django Admin
     path("admin/", admin.site.urls),
     # Apps
-    path("api/v1/employees/", include("employee.urls")),
-    path("api/v1/clients/", include("clients_parking.urls")),
-    path("api/v1/cars/", include("cars.urls")),
-    path("api/v1/vacancies/", include("vacanciens.urls")),
-    path("api/v1/parking/", include("parking.urls")),
-    path("api/v1/reporting/", include("reporting.urls")),
+    path(f"{path_namespace}authentication/", include("authentication.urls")),
+    path(f"{path_namespace}employees/", include("employee.urls")),
+    path(f"{path_namespace}clients/", include("clients_parking.urls")),
+    path(f"{path_namespace}cars/", include("cars.urls")),
+    path(f"{path_namespace}vacancies/", include("vacanciens.urls")),
+    path(f"{path_namespace}parking/", include("parking.urls")),
+    path(f"{path_namespace}reporting/", include("reporting.urls")),
     # swagger
     path(
         "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
