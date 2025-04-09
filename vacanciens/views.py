@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from park_easy.service import ParkEasyService
 from park_easy.repository import ParkEasyRepository
@@ -17,6 +18,8 @@ class VacanciesViewList(APIView):
     Returns:
         Response: The serialized data of all users.
     """
+
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         vacancies = ParkEasyService.service_get_all_or_one(model=Vacancies, app_serializer=VacanciesSerializer)
@@ -39,6 +42,8 @@ class VacanciesViewDetail(APIView):
     Returns:
         Response: The serialized data of the user.
     """
+
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         try:
