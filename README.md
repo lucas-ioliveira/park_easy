@@ -179,7 +179,7 @@ status  201 created
 
 <p>Administração do sistema.</p>
 
-![Rota do admin](docs/images/admin.png)
+![Rota do admin](docs/images/admin_img.png)
 
 
 
