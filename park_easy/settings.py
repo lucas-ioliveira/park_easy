@@ -148,7 +148,7 @@ MINUTES_PARKING_30 = 30
 MINUTES_PARKING_60 = 60
 
 # Valores do estacionamento
-"""    
+"""
     30 min - R$8,00
     60 min - R$15,00
     a cada hora após 60 min - R$3,00

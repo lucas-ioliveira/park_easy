@@ -58,7 +58,7 @@ class ClientViewDetail(APIView):
     def delete(self, request, pk):
         try:
             ParkEasyService.service_del_one(model=Clients, pk=pk)
-        except Exception as e:
+        except Exception:
             return Response(
                 {"message": "Client not found or non-existent"},
                 status=status.HTTP_404_NOT_FOUND,
@@ -67,7 +67,7 @@ class ClientViewDetail(APIView):
 
     def patch(self, request, pk):
         try:
-            client = ParkEasyRepository.repo_get_all_or_one_obj(model=Clients,pk=pk)
+            client = ParkEasyRepository.repo_get_all_or_one_obj(model=Clients, pk=pk)
         except Clients.DoesNotExist:
             return Response(
                 {"message": "Client not found or non-existent"},

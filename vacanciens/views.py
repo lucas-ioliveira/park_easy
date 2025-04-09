@@ -47,7 +47,7 @@ class VacanciesViewDetail(APIView):
 
     def get(self, request, pk):
         try:
-            vacancies = ParkEasyService.service_get_all_or_one(model=Vacancies,app_serializer=VacanciesSerializer, pk=pk)
+            vacancies = ParkEasyService.service_get_all_or_one(model=Vacancies, app_serializer=VacanciesSerializer, pk=pk)
         except Vacancies.DoesNotExist:
             return Response(
                 {"message": "Vacancies not found or non-existent"},

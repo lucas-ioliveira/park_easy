@@ -12,8 +12,6 @@ from park_easy.repository import ParkEasyRepository
 from park_easy.service import ParkEasyService
 
 
-
-
 class ParkingViewList(APIView):
     """
     Retrieves all users and serializes them using the UserSerializer.

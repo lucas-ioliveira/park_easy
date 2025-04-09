@@ -26,7 +26,7 @@ class ParkEasyRepository:
                 vacancies.vacancies_occupied = int(vacancies.vacancies_occupied + 1)
                 vacancies.vacancies_free = int(total_vacancies - 1)
                 return vacancies.save()
-    
+
     @staticmethod
     def repo_vacancie_free(model):
         vacancies_id = 1

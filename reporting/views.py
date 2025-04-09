@@ -17,7 +17,7 @@ from parking.models import Parking
 class ExportarRelatorioView(APIView):
 
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request, *args, **kwargs):
         # http://127.0.0.1:8000/api/v1/reporting/exportar/?data=2024-03-06 00:00:00&employee=1&cliente=1
         """

@@ -13,7 +13,7 @@ from employee.serializers import EmployeeSerializer, UserSerializer
 class UserCreateAPIView(APIView):
 
     permission_classes = [IsAuthenticated]
-    
+
     def post(self, request):
         """
         Creates a new user using the UserSerializer.
@@ -25,7 +25,7 @@ class UserCreateAPIView(APIView):
 
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

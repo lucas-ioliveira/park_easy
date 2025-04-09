@@ -1,5 +1,6 @@
 from park_easy.repository import ParkEasyRepository
 
+
 class ParkEasyService:
 
     @staticmethod
@@ -16,7 +17,7 @@ class ParkEasyService:
             obj = ParkEasyRepository.repo_get_all_or_one_obj(model)
             serializer = app_serializer(obj, many=True)
             return serializer
-    
+
     @staticmethod
     def service_post_or_update(request, obj=None, app_serializer=None):
         if obj:

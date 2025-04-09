@@ -57,7 +57,7 @@ class CarViewDetail(APIView):
     def delete(self, request, pk):
         try:
             ParkEasyService.service_del_one(model=Car, pk=pk)
-        except Exception as e:
+        except Exception:
             return Response(
                 {"message": "Car not found or non-existent"},
                 status=status.HTTP_404_NOT_FOUND,
