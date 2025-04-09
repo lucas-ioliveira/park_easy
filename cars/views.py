@@ -1,11 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Car
-from .serializers import CarSerializer
-
-from ipdb import set_trace
+from cars.serializers import CarSerializer
+from park_easy.repository import ParkEasyRepository
+from park_easy.service import ParkEasyService
 
 
 class CarViewList(APIView):
@@ -17,14 +18,14 @@ class CarViewList(APIView):
         Response: The serialized data of all users.
     """
 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
-        cars = Car.objects.filter(is_active=True)
-        serializer = CarSerializer(cars, many=True)
-        data = serializer.data
-        return Response(data, status=status.HTTP_200_OK)
+        cars = ParkEasyService.service_get_all_or_one(model=Car, app_serializer=CarSerializer)
+        return Response(cars.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = CarSerializer(data=request.data)
+        serializer = ParkEasyService.service_post_or_update(request, app_serializer=CarSerializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -41,35 +42,31 @@ class CarViewDetail(APIView):
         Response: The serialized data of the user.
     """
 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, pk):
         try:
-            car = Car.objects.get(pk=pk)
-
+            car = ParkEasyService.service_get_all_or_one(model=Car, pk=pk, app_serializer=CarSerializer)
         except Car.DoesNotExist:
             return Response(
                 {"message": "Car not found or non-existent"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-
-        serializer = CarSerializer(car)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(car.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
         try:
-            car = Car.objects.get(pk=pk)
-        except Car.DoesNotExist:
+            ParkEasyService.service_del_one(model=Car, pk=pk)
+        except Exception as e:
             return Response(
                 {"message": "Car not found or non-existent"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-
-        car.is_active = False
-        car.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, pk):
         try:
-            car = Car.objects.get(pk=pk)
+            car = ParkEasyRepository.repo_get_all_or_one_obj(model=Car, pk=pk)
 
         except Car.DoesNotExist:
             return Response(
@@ -77,7 +74,7 @@ class CarViewDetail(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        serializer = CarSerializer(car, data=request.data, partial=True)
+        serializer = ParkEasyService.service_post_or_update(request, car=car, app_serializer=CarSerializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

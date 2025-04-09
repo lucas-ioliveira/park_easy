@@ -1,9 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
-from .models import Vacancies
-from .serializers import VacanciesSerializer
+from park_easy.service import ParkEasyService
+from park_easy.repository import ParkEasyRepository
+
+from vacanciens.models import Vacancies
+from vacanciens.serializers import VacanciesSerializer
 
 
 class VacanciesViewList(APIView):
@@ -15,14 +19,14 @@ class VacanciesViewList(APIView):
         Response: The serialized data of all users.
     """
 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
-        vacancies = Vacancies.objects.filter(is_active=True)
-        serializer = VacanciesSerializer(vacancies, many=True)
-        data = serializer.data
-        return Response(data, status=status.HTTP_200_OK)
+        vacancies = ParkEasyService.service_get_all_or_one(model=Vacancies, app_serializer=VacanciesSerializer)
+        return Response(vacancies.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = VacanciesSerializer(data=request.data)
+        serializer = ParkEasyService.service_post_or_update(request=request, app_serializer=VacanciesSerializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -39,32 +43,31 @@ class VacanciesViewDetail(APIView):
         Response: The serialized data of the user.
     """
 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, pk):
         try:
-            vacancies = Vacancies.objects.get(pk=pk)
+            vacancies = ParkEasyService.service_get_all_or_one(model=Vacancies,app_serializer=VacanciesSerializer, pk=pk)
         except Vacancies.DoesNotExist:
             return Response(
                 {"message": "Vacancies not found or non-existent"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        serializer = VacanciesSerializer(vacancies)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(vacancies.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
         try:
-            vacancie = Vacancies.objects.get(pk=pk)
+            ParkEasyService.service_del_one(model=Vacancies, pk=pk)
         except Vacancies.DoesNotExist:
             return Response(
                 {"message": "Vacancies not found or non-existent"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        vacancie.is_active = False
-        vacancie.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, pk):
         try:
-            vacancie = Vacancies.objects.get(pk=pk)
+            vacancie = ParkEasyRepository.repo_get_all_or_one_obj(model=Vacancies, pk=pk)
         except Vacancies.DoesNotExist:
             return Response(
                 {"message": "Vacancies not found or non-existent"},

@@ -1,9 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
-from .models import Clients
-from .serializers import EmployeeSerializer
+from park_easy.repository import ParkEasyRepository
+from park_easy.service import ParkEasyService
+
+from clients_parking.models import Clients
+from clients_parking.serializers import ClientsSerializer
 
 
 class ClientViewList(APIView):
@@ -15,13 +19,14 @@ class ClientViewList(APIView):
         Response: The serialized data of all users.
     """
 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
-        clients = Clients.objects.filter(is_active=True)
-        serializer = EmployeeSerializer(clients, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        clients = ParkEasyService.service_get_all_or_one(model=Clients, app_serializer=ClientsSerializer)
+        return Response(clients.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = EmployeeSerializer(data=request.data)
+        serializer = ParkEasyService.service_post_or_update(request=request, app_serializer=ClientsSerializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -38,39 +43,37 @@ class ClientViewDetail(APIView):
         Response: The serialized data of the user.
     """
 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, pk):
         try:
-            client = Clients.objects.get(pk=pk)
+            client = ParkEasyService.service_get_all_or_one(model=Clients, pk=pk, app_serializer=ClientsSerializer)
         except Clients.DoesNotExist:
             return Response(
                 {"message": "Client not found or non-existent"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-
-        serializer = EmployeeSerializer(client)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(client.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
         try:
-            client = Clients.objects.get(pk=pk)
-        except Clients.DoesNotExist:
+            ParkEasyService.service_del_one(model=Clients, pk=pk)
+        except Exception as e:
             return Response(
                 {"message": "Client not found or non-existent"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        client.is_active = False
-        client.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, pk):
         try:
-            client = Clients.objects.get(pk=pk)
+            client = ParkEasyRepository.repo_get_all_or_one_obj(model=Clients,pk=pk)
         except Clients.DoesNotExist:
             return Response(
                 {"message": "Client not found or non-existent"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        serializer = EmployeeSerializer(client, data=request.data, partial=True)
+        serializer = ParkEasyService.service_post_or_update(request=request, obj=client, app_serializer=ClientsSerializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
