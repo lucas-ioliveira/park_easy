@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Car
 from cars.serializers import CarSerializer
@@ -16,6 +17,8 @@ class CarViewList(APIView):
     Returns:
         Response: The serialized data of all users.
     """
+
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         cars = ParkEasyService.service_get_all_or_one(model=Car, app_serializer=CarSerializer)
@@ -38,6 +41,8 @@ class CarViewDetail(APIView):
     Returns:
         Response: The serialized data of the user.
     """
+
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         try:
