@@ -2,17 +2,32 @@ from django.http import FileResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+
 import os
+from datetime import datetime, timedelta
+
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
-from datetime import datetime, timedelta
+
 from parking.models import Parking
 
 
 class ExportarRelatorioView(APIView):
+
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request, *args, **kwargs):
         # http://127.0.0.1:8000/api/v1/reporting/exportar/?data=2024-03-06 00:00:00&employee=1&cliente=1
+        """
+        Endpoint para exportar relatório de vendas em PDF.
+        Parâmetros:
+            - data: Data específica para exportar o relatório. Formato: AAAA-MM-DD HH:MM:SS
+            - employee: ID do funcionário para exportar o relatório
+            - cliente: ID do cliente para exportar o relatório
+        Exemplo: http://127.0.0.1:8000/api/v1/reporting/exportar/?data=2024-03-06 00:00:00&employee=1&cliente=1
+        """
         data = request.query_params.get("data")
         employee = request.query_params.get("employee")
         client = request.query_params.get("cliente")
@@ -56,6 +71,13 @@ class ExportarRelatorioView(APIView):
         return response
 
     def exportar_para_pdf(self, queryset, filename):
+        """
+        Exporta um queryset para um PDF.
+
+        :param queryset: um QuerySet de Parkings
+        :param filename: nome do arquivo a ser criado
+        :return: None
+        """
         doc = SimpleDocTemplate(filename, pagesize=letter)
         styles = getSampleStyleSheet()
         header_style = styles["Heading1"]
